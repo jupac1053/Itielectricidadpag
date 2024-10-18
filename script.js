@@ -58,3 +58,14 @@ boton4.addEventListener('change', () => {
     updateDeviceState(4, isChecked); // '4' es el ID para boton4
     imagen7.src = isChecked ? 'imagen8.jpg' : 'imagen7.jpg';
 });
+async function testConnection() {
+    const { data, error } = await supabase.from('reles').select('*');
+    if (error) {
+        console.error('Error connecting to Supabase:', error);
+    } else {
+        console.log('Data fetched from Supabase:', data);
+    }
+}
+
+testConnection();
+
