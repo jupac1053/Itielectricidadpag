@@ -1,56 +1,60 @@
-// Inicializa Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyA-QOiNqn1UUEmAU5xdp5Ezdjc68iLsFQU",
-  authDomain: "iti-electricidad-ae0b5.firebaseapp.com",
-  databaseURL: "https://iti-electricidad-ae0b5-default-rtdb.firebaseio.com",
-  projectId: "iti-electricidad-ae0b5",
-  storageBucket: "iti-electricidad-ae0b5.appspot.com",
-  messagingSenderId: "248405714893",
-  appId: "1:248405714893:web:98609ab75ce3feb8a70684",
-  measurementId: "G-TBLGPR5066"
-};
+// script.js
 
-// Función para actualizar el estado y la imagen
-function updateDeviceStatus(deviceId, status) {
-    // Actualiza el estado en Firebase
-    database.ref('devices/' + deviceId).set(status);
 
-    // Cambia la imagen según el estado
-    const imgElement = document.getElementById('imagen' + deviceId.slice(-1));
-    if (deviceId === 'boton1') {
-        imgElement.src = status ? 'imagen1.jpg' : 'imagen4.jpg';
-    } else if (deviceId === 'boton2') {
-        imgElement.src = status ? 'imagen2.jpg' : 'imagen4.jpg';
-    } else if (deviceId === 'boton3') {
-        imgElement.src = status ? 'imagen3.jpg' : 'imagen6.jpg';
-    } else if (deviceId === 'boton4') {
-        imgElement.src = status ? 'imagen7.jpg' : 'imagen8.jpg';
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 'https://zlkmikpzyonajhimfvfz.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+// Importa Supabase
+const { createClient } = supabase;
+
+
+
+// Obtén los elementos del DOM
+const boton1 = document.getElementById('boton1');
+const boton2 = document.getElementById('boton2');
+const boton3 = document.getElementById('boton3');
+const boton4 = document.getElementById('boton4');
+const imagen1 = document.getElementById('imagen1');
+const imagen2 = document.getElementById('imagen2');
+const imagen3 = document.getElementById('imagen3');
+const imagen7 = document.getElementById('imagen7');
+
+// Función para actualizar el estado en Supabase
+async function updateDeviceState(deviceId, isChecked) {
+    const { data, error } = await supabase
+        .from('reles')
+        .update({ estado: isChecked })
+        .eq('id', deviceId);
+
+    if (error) {
+        console.error('Error updating device state:', error);
     }
 }
 
-// Manejo de eventos de los botones
-document.getElementById('boton1').addEventListener('change', function() {
-    updateDeviceStatus('boton1', this.checked);
+// Manejo de eventos para los botones
+boton1.addEventListener('change', () => {
+    const isChecked = boton1.checked;
+    updateDeviceState(1, isChecked); // Supongamos que '1' es el ID para boton1
+    imagen1.src = isChecked ? 'imagen4.jpg' : 'imagen1.jpg';
 });
 
-document.getElementById('boton2').addEventListener('change', function() {
-    updateDeviceStatus('boton2', this.checked);
+boton2.addEventListener('change', () => {
+    const isChecked = boton2.checked;
+    updateDeviceState(2, isChecked); // '2' es el ID para boton2
+    imagen2.src = isChecked ? 'imagen4.jpg' : 'imagen2.jpg';
 });
 
-document.getElementById('boton3').addEventListener('change', function() {
-    updateDeviceStatus('boton3', this.checked);
+boton3.addEventListener('change', () => {
+    const isChecked = boton3.checked;
+    updateDeviceState(3, isChecked); // '3' es el ID para boton3
+    imagen3.src = isChecked ? 'imagen6.jpg' : 'imagen3.jpg';
 });
 
-document.getElementById('boton4').addEventListener('change', function() {
-    updateDeviceStatus('boton4', this.checked);
+boton4.addEventListener('change', () => {
+    const isChecked = boton4.checked;
+    updateDeviceState(4, isChecked); // '4' es el ID para boton4
+    imagen7.src = isChecked ? 'imagen8.jpg' : 'imagen7.jpg';
 });
-
-
-
-
-
-
-
-
-
-
