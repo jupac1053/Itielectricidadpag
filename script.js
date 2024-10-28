@@ -1,40 +1,18 @@
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA-QOiNqn1UUEmAU5xdp5Ezdjc68iLsFQU",
-  authDomain: "iti-electricidad-ae0b5.firebaseapp.com",
-  databaseURL: "https://iti-electricidad-ae0b5-default-rtdb.firebaseio.com",
-  projectId: "iti-electricidad-ae0b5",
-  storageBucket: "iti-electricidad-ae0b5.appspot.com",
-  messagingSenderId: "248405714893",
-  appId: "1:248405714893:web:98609ab75ce3feb8a70684",
-  measurementId: "G-TBLGPR5066"
-};
+const adafruitIoUsername = 'Jupac1053';
+const adafruitIoKey = 'Jupac-1053';
+const adafruitIoUrl = `(https://io.adafruit.com/api/v2/Jupac1053/groups/default)`;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// Función para actualizar el estado del dispositivo
-function updateDeviceState(device, state) {
-    database.ref('devices/' + device).set({
-        state: state
-    });
+function sendData(device, state) {
+  fetch(`${adafruitIoUrl}/api/v2/${adafruitIoUsername}/feeds/dispositivo${device}/data`, {
+    method: 'POST',
+    headers: {
+      'X-AIO-Key': adafruitIoKey,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ value: state })
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
 }
-
-// Escuchar cambios en el estado de los dispositivos
-database.ref('devices').on('value', (snapshot) => {
-    const devices = snapshot.val();
-    for (const device in devices) {
-        const state = devices[device].state;
-        document.getElementById('boton' + device).checked = state;
-    }
-});
-
-// Manejo de eventos para los interruptores
-document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-    checkbox.addEventListener('change', (event) => {
-        const deviceId = event.target.id.replace('boton', '');
-        const newState = event.target.checked;
-        updateDeviceState(deviceId, newState);
-    });
-});
