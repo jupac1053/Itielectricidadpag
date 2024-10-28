@@ -1,7 +1,7 @@
 
 const adafruitIoUsername = 'Jupac1053';
 const adafruitIoKey = 'Jupac-1053';
-const adafruitIoUrl = `(https://io.adafruit.com/api/v2/Jupac1053/groups/default)`;
+const adafruitIoUrl = `(https://io.adafruit.com/Jupac1053/feeds/dispositivo1)`;
 
 function sendData(device, state) {
   fetch(`${adafruitIoUrl}/api/v2/${adafruitIoUsername}/feeds/dispositivo${device}/data`, {
