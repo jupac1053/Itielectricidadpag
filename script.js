@@ -1,4 +1,4 @@
-// Importa la instancia de Supabase
+// Importar instancia de Supabase
 import { supabase } from './config.js';
 
 // Función para actualizar el estado del dispositivo
@@ -20,13 +20,29 @@ supabase
   })
   .subscribe();
 
-// Eventos de los checkboxes
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-    checkbox.addEventListener('change', (event) => {
-      const deviceId = event.target.id.replace('boton', '');
-      const newState = event.target.checked;
-      updateDeviceState(deviceId, newState);
+// Obtener dispositivos desde la base de datos
+async function getDispositivos() {
+  const { data, error } = await supabase
+    .from('dispositivos')
+    .select('*');
+  if (error) console.error(error);
+  else {
+    data.forEach((dispositivo) => {
+      const deviceId = dispositivo.id;
+      const estado = dispositivo.estado;
+      document.getElementById(`boton${deviceId}`).checked = estado;
     });
+  }
+}
+
+// Llamar función para obtener dispositivos
+getDispositivos();
+
+// Agregar evento a los botones
+document.querySelectorAll('.switch').forEach((element) => {
+  element.addEventListener('change', (e) => {
+    const deviceId = e.target.id.replace('boton', '');
+    const state = e.target.checked;
+    updateDeviceState(deviceId, state);
   });
 });
