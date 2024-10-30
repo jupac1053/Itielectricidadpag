@@ -2,9 +2,9 @@
 import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
 
 // Variables de entorno
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseKey = import.meta.env.SUPABASE_KEY;
-const supabaseSecret = import.meta.env.SUPABASE_SECRET;
+const supabaseUrl = window._env_.SUPABASE_URL;
+const supabaseKey = window._env_.SUPABASE_KEY;
+const supabaseSecret = window._env_.SUPABASE_SECRET;
 
 // Inicializa Supabase
 const supabase = createClient(supabaseUrl, supabaseKey);
