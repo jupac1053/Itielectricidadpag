@@ -32,7 +32,7 @@
   });
 
   function enviarEstadoBotones() {
-    const scriptURL = 'https://script.google.com/macros/d/TU_ID_DE_SCRIPT/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbysOrzD3drLJa1puiaxK_u9Qj4I2HcFDzzrK063NX-H5-XcxBDR5aFDRLTQuYspQwd5Ag/exec';
     const formData = new FormData();
     formData.append('boton1', estadoBotones.boton1);
     formData.append('boton2', estadoBotones.boton2);
