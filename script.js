@@ -1,48 +1,50 @@
-// Importar instancia de Supabase
-import { supabase } from './config.js';
 
-// Función para actualizar el estado del dispositivo
-async function updateDeviceState(deviceId, state) {
-  const { data, error } = await supabase
-    .from('dispositivos')
-    .update({ estado: state })
-    .eq('id', deviceId);
-  if (error) console.error(error);
-}
+  const boton1 = document.getElementById('boton1');
+  const boton2 = document.getElementById('boton2');
+  const boton3 = document.getElementById('boton3');
+  const boton4 = document.getElementById('boton4');
 
-// Escuchar cambios en la base de datos
-supabase
-  .from('dispositivos')
-  .on('UPDATE', (payload) => {
-    const deviceId = payload.new.id;
-    const state = payload.new.estado;
-    document.getElementById(`boton${deviceId}`).checked = state;
-  })
-  .subscribe();
+  const estadoBotones = {
+    boton1: false,
+    boton2: false,
+    boton3: false,
+    boton4: false
+  };
 
-// Obtener dispositivos desde la base de datos
-async function getDispositivos() {
-  const { data, error } = await supabase
-    .from('dispositivos')
-    .select('*');
-  if (error) console.error(error);
-  else {
-    data.forEach((dispositivo) => {
-      const deviceId = dispositivo.id;
-      const estado = dispositivo.estado;
-      document.getElementById(`boton${deviceId}`).checked = estado;
-    });
-  }
-}
-
-// Llamar función para obtener dispositivos
-getDispositivos();
-
-// Agregar evento a los botones
-document.querySelectorAll('.switch').forEach((element) => {
-  element.addEventListener('change', (e) => {
-    const deviceId = e.target.id.replace('boton', '');
-    const state = e.target.checked;
-    updateDeviceState(deviceId, state);
+  boton1.addEventListener('change', () => {
+    estadoBotones.boton1 = boton1.checked;
+    enviarEstadoBotones();
   });
-});
+
+  boton2.addEventListener('change', () => {
+    estadoBotones.boton2 = boton2.checked;
+    enviarEstadoBotones();
+  });
+
+  boton3.addEventListener('change', () => {
+    estadoBotones.boton3 = boton3.checked;
+    enviarEstadoBotones();
+  });
+
+  boton4.addEventListener('change', () => {
+    estadoBotones.boton4 = boton4.checked;
+    enviarEstadoBotones();
+  });
+
+  function enviarEstadoBotones() {
+    const scriptURL = 'https://script.google.com/macros/d/TU_ID_DE_SCRIPT/exec';
+    const formData = new FormData();
+    formData.append('boton1', estadoBotones.boton1);
+    formData.append('boton2', estadoBotones.boton2);
+    formData.append('boton3', estadoBotones.boton3);
+    formData.append('boton4', estadoBotones.boton4);
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error(error));
+  }
+</script>
